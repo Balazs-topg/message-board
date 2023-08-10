@@ -1,41 +1,45 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require("express");
+const path = require("path");
+const pug = require("pug");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const app = express();
+const port = 3000;
 
-var app = express();
+app.use(express.urlencoded({ extended: true }));
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+const messages = [
+  { text: "Hello World!", user: "Charles", added: new Date() },
+  ,
+  {
+    text: `I live in a low income housing environment that goes by the government name of "Section 8." Me and a group of my allies control certain areas of this section in order to run our illegitimate business. We possess unregistered firearms, stolen vehicles, mind-altering inhibitors and only use cash for financial purchases. If anyone would like to settle unfinished altercations, I will be more than happy to release my address. I would like to warn you; I am a very dangerous person and I regularly disobey the law.
+  `,
+    user: "John Doe",
+    added: new Date(),
+  },
+];
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.get("/", (req, res) => {
+  res.render("index", { messages });
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+app.get("/new", (req, res) => {
+  res.render("new");
 });
 
-module.exports = app;
+app.post("/new", (req, res) => {
+  const { userName, message } = req.body;
+
+  const newMessage = {
+    text: message,
+    user: userName,
+    added: new Date(),
+  };
+  messages.push(newMessage);
+
+  res.redirect("/");
+});
+
+app.listen(port, () => console.log(`Example app listening on port ${port}`));

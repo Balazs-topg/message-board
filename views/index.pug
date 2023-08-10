@@ -1,0 +1,10 @@
+html
+  head
+    title message board
+  body
+    h1 message board
+    a(href="new") add message
+
+    ul
+      each message in messages
+        li= message.user +" - "+ message.text

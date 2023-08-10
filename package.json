@@ -13,5 +13,8 @@
     "install": "^0.13.0",
     "npm": "^9.8.1",
     "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.3"
   }
 }

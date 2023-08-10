@@ -7,4 +7,6 @@ html
 
     ul
       each message in messages
-        li= message.user +" - "+ message.text
+        li
+          strong= message.user || "Unknown User"
+          | : #{message.text || "No Text"}
